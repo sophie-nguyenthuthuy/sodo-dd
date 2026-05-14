@@ -1,4 +1,5 @@
 """Vietnamese text normalization helpers used by the OCR parser."""
+
 from __future__ import annotations
 
 import re

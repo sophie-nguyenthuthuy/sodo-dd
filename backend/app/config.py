@@ -1,7 +1,7 @@
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import Field, PostgresDsn, RedisDsn
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -13,10 +13,10 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     secret_key: str = Field(min_length=32)
 
-    database_url: PostgresDsn
-    redis_url: RedisDsn
-    celery_broker_url: RedisDsn
-    celery_result_backend: RedisDsn
+    database_url: str
+    redis_url: str
+    celery_broker_url: str
+    celery_result_backend: str
 
     s3_endpoint_url: str
     s3_region: str = "ap-southeast-1"

@@ -4,6 +4,7 @@ In production this uses signed B2B endpoints negotiated bilaterally with the
 General Department of Land Administration (Tổng cục Quản lý đất đai) or
 provincial Văn phòng Đăng ký Đất đai (VPĐKĐĐ).
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -40,7 +41,7 @@ class LandPortalAdapter(BaseAdapter):
                 },
             )
             data = resp.json()
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             return self._error(str(exc), url=url)
         if not data.get("found"):
             return self._no_data(url=url)

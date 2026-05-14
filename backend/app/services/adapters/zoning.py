@@ -6,6 +6,7 @@ Provider matrix:
   danang -> https://gis.danang.gov.vn
   others -> Bộ TNMT national portal
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -34,7 +35,7 @@ class ZoningAdapter(BaseAdapter):
                 params={"parcel": parcel_number, "sheet": sheet_number, "province": province},
             )
             return self._ok(resp.json(), url=url)
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             return self._error(str(exc), url=url)
 
     def _mock(

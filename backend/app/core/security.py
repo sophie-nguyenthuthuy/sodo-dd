@@ -1,4 +1,5 @@
 """Auth primitives: password hashing, JWT, API keys, field-level encryption."""
+
 from __future__ import annotations
 
 import base64
@@ -79,7 +80,9 @@ def encrypt_field(plaintext: str | None) -> str | None:
         return None
     aes = _aesgcm()
     nonce = os.urandom(12)
-    ct = aes.encrypt(nonce, plaintext.encode(), associated_data=settings.field_encryption_key_id.encode())
+    ct = aes.encrypt(
+        nonce, plaintext.encode(), associated_data=settings.field_encryption_key_id.encode()
+    )
     return base64.b64encode(nonce + ct).decode()
 
 
@@ -89,7 +92,9 @@ def decrypt_field(ciphertext: str | None) -> str | None:
     aes = _aesgcm()
     blob = base64.b64decode(ciphertext)
     nonce, ct = blob[:12], blob[12:]
-    return aes.decrypt(nonce, ct, associated_data=settings.field_encryption_key_id.encode()).decode()
+    return aes.decrypt(
+        nonce, ct, associated_data=settings.field_encryption_key_id.encode()
+    ).decode()
 
 
 # ───── Webhook HMAC

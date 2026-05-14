@@ -1,6 +1,7 @@
 from fastapi import APIRouter, status
 
 from app.api.deps import SessionDep, UserDep
+from app.config import settings
 from app.core.exceptions import Forbidden, Unauthorized
 from app.core.security import generate_api_key, issue_access_token, verify_password
 from app.models import ApiKey, User
@@ -11,7 +12,6 @@ from app.schemas.auth import (
     LoginRequest,
     TokenResponse,
 )
-from app.config import settings
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -21,7 +21,9 @@ def login(req: LoginRequest, db: SessionDep) -> TokenResponse:
     user = db.query(User).filter(User.email == req.email).first()
     if user is None or not user.is_active or not verify_password(req.password, user.password_hash):
         raise Unauthorized("invalid credentials")
-    token = issue_access_token(user.id, claims={"org": user.organization_id, "role": user.role.value})
+    token = issue_access_token(
+        user.id, claims={"org": user.organization_id, "role": user.role.value}
+    )
     return TokenResponse(access_token=token, expires_in=settings.jwt_access_ttl_min * 60)
 
 

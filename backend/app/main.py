@@ -20,10 +20,12 @@ log = get_logger("app")
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):  # noqa: ARG001
+async def lifespan(app: FastAPI):
     configure_logging()
     if settings.sentry_dsn:
-        sentry_sdk.init(dsn=settings.sentry_dsn, environment=settings.app_env, traces_sample_rate=0.1)
+        sentry_sdk.init(
+            dsn=settings.sentry_dsn, environment=settings.app_env, traces_sample_rate=0.1
+        )
     log.info("startup", env=settings.app_env, version=__version__)
     yield
     log.info("shutdown")

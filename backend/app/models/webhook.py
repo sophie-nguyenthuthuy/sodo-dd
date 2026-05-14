@@ -5,7 +5,9 @@ from app.models.base import Base, IDMixin, TimestampMixin, new_ulid
 
 
 class WebhookEndpoint(Base, IDMixin, TimestampMixin):
-    organization_id: Mapped[str] = mapped_column(ForeignKey("organization.id", ondelete="CASCADE"), index=True)
+    organization_id: Mapped[str] = mapped_column(
+        ForeignKey("organization.id", ondelete="CASCADE"), index=True
+    )
     url: Mapped[str] = mapped_column(String(500), nullable=False)
     secret: Mapped[str] = mapped_column(String(128), nullable=False)
     events: Mapped[str] = mapped_column(String(500), default="dd.completed,dd.failed")

@@ -14,7 +14,7 @@ class Base(DeclarativeBase):
 
     @declared_attr.directive
     @classmethod
-    def __tablename__(cls) -> str:  # noqa: D401
+    def __tablename__(cls) -> str:
         # CamelCase -> snake_case, plural-naive
         import re
 

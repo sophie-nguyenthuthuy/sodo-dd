@@ -5,6 +5,7 @@ Strategy:
   - Pull labelled fields using regexes anchored on Vietnamese keywords.
   - Each parse returns confidence per field so downstream scoring can weight risk.
 """
+
 from __future__ import annotations
 
 import re
@@ -79,7 +80,7 @@ class CertificateParser:
             result.field_confidence["owner_name"] = 0.8
 
         # CCCD/CMND
-        if v := _match(text, r"(?:CCCD|CMND|CMT|S[ốo]\s*CCCD)[:\s]*([0-9]{9}|[0-9]{12})"):
+        if v := _match(text, r"(?:CCCD|CMND|CMT|S[ốo]\s*CCCD)[:\s]*([0-9]{12}|[0-9]{9})"):
             result.owner_id = v
             result.field_confidence["owner_id"] = 0.95
 
@@ -111,7 +112,9 @@ class CertificateParser:
         if v := _match(text, r"(?:Cấp\s*b[ởo]i|Cơ\s*quan\s*c[ấa]p)[:\s]+([^\n]{3,120})"):
             result.issued_by = v
             result.field_confidence["issued_by"] = 0.75
-        if v := _match(text, r"(?:Ng[àa]y\s*c[ấa]p|C[ấa]p\s*ng[àa]y)[:\s]+([0-3]?\d[/-][0-1]?\d[/-]\d{2,4})"):
+        if v := _match(
+            text, r"(?:Ng[àa]y\s*c[ấa]p|C[ấa]p\s*ng[àa]y)[:\s]+([0-3]?\d[/-][0-1]?\d[/-]\d{2,4})"
+        ):
             result.issued_at = v
             result.field_confidence["issued_at"] = 0.85
 
@@ -122,9 +125,13 @@ class CertificateParser:
         # Province / district / ward — try common preposition cues
         if v := _match(text, r"T[ỉi]nh\s+([A-ZÀ-ỹ][^\s,;]+(?:\s+[A-ZÀ-ỹ][^\s,;]+)*)"):
             result.province = v
-        if v := _match(text, r"(?:Quận|Huyện|Th[ịi]\s*x[ãa])\s+([A-ZÀ-ỹ][^\s,;]+(?:\s+[A-ZÀ-ỹ][^\s,;]+)*)"):
+        if v := _match(
+            text, r"(?:Quận|Huyện|Th[ịi]\s*x[ãa])\s+([A-ZÀ-ỹ][^\s,;]+(?:\s+[A-ZÀ-ỹ][^\s,;]+)*)"
+        ):
             result.district = v
-        if v := _match(text, r"(?:Phường|Xã|Th[ịi]\s*tr[ấa]n)\s+([A-ZÀ-ỹ][^\s,;]+(?:\s+[A-ZÀ-ỹ][^\s,;]+)*)"):
+        if v := _match(
+            text, r"(?:Phường|Xã|Th[ịi]\s*tr[ấa]n)\s+([A-ZÀ-ỹ][^\s,;]+(?:\s+[A-ZÀ-ỹ][^\s,;]+)*)"
+        ):
             result.ward = v
 
         return result

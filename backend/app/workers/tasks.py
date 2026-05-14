@@ -30,7 +30,7 @@ def run_due_diligence(self, job_id: str) -> str:
             return "missing"
         try:
             process_job(db, job)
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             log.exception("dd failed job_id=%s", job_id)
             job.status = JobStatus.FAILED
             job.error_code = type(exc).__name__

@@ -1,4 +1,5 @@
 """Redis-backed token-bucket limiter, keyed by API key ID."""
+
 from __future__ import annotations
 
 import time

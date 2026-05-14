@@ -1,7 +1,6 @@
 from app.models.certificate import CertificateForm
 from app.services.ocr.parser import CertificateParser
 
-
 SAMPLE_2009 = """
 CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM
 Giấy chứng nhận quyền sử dụng đất, quyền sở hữu nhà ở và tài sản khác gắn liền với đất

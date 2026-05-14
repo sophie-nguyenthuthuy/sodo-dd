@@ -2,6 +2,7 @@
 
 Production: per-province VPĐKĐĐ APIs (signed). Mock returns plausible records.
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -34,7 +35,7 @@ class TransactionHistoryAdapter(BaseAdapter):
                 },
             )
             return self._ok(resp.json(), url=url)
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             return self._error(str(exc), url=url)
 
     def _mock(

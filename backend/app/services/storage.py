@@ -1,4 +1,5 @@
 """S3 / MinIO storage abstraction."""
+
 from __future__ import annotations
 
 import boto3
@@ -18,7 +19,9 @@ def s3():
             aws_access_key_id=settings.s3_access_key,
             aws_secret_access_key=settings.s3_secret_key,
             region_name=settings.s3_region,
-            config=Config(s3={"addressing_style": "path" if settings.s3_force_path_style else "auto"}),
+            config=Config(
+                s3={"addressing_style": "path" if settings.s3_force_path_style else "auto"}
+            ),
         )
     return _s3
 

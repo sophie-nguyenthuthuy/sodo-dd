@@ -1,4 +1,5 @@
 """Sổ Đỏ / Sổ Hồng certificate record."""
+
 import enum
 from typing import TYPE_CHECKING
 
@@ -11,16 +12,18 @@ if TYPE_CHECKING:
     from app.models.organization import Organization
 
 
-class CertificateForm(str, enum.Enum):
-    SO_DO_1993 = "so_do_1993"        # Giấy chứng nhận QSDĐ 1993 (bìa đỏ)
-    SO_HONG_1995 = "so_hong_1995"    # Giấy chứng nhận QSH nhà ở (bìa hồng)
-    UNIFIED_2009 = "unified_2009"    # GCN QSDĐ, QSH nhà ở và tài sản gắn liền (mẫu hợp nhất 2009)
-    UNIFIED_2024 = "unified_2024"    # Mẫu thống nhất theo Luật Đất đai 2024
+class CertificateForm(enum.StrEnum):
+    SO_DO_1993 = "so_do_1993"  # Giấy chứng nhận QSDĐ 1993 (bìa đỏ)
+    SO_HONG_1995 = "so_hong_1995"  # Giấy chứng nhận QSH nhà ở (bìa hồng)
+    UNIFIED_2009 = "unified_2009"  # GCN QSDĐ, QSH nhà ở và tài sản gắn liền (mẫu hợp nhất 2009)
+    UNIFIED_2024 = "unified_2024"  # Mẫu thống nhất theo Luật Đất đai 2024
     UNKNOWN = "unknown"
 
 
 class Certificate(Base, IDMixin, TimestampMixin):
-    organization_id: Mapped[str] = mapped_column(ForeignKey("organization.id", ondelete="CASCADE"), index=True)
+    organization_id: Mapped[str] = mapped_column(
+        ForeignKey("organization.id", ondelete="CASCADE"), index=True
+    )
 
     # File storage
     file_key: Mapped[str] = mapped_column(String(500), nullable=False)
@@ -38,21 +41,21 @@ class Certificate(Base, IDMixin, TimestampMixin):
     form: Mapped[CertificateForm] = mapped_column(
         Enum(CertificateForm, name="certificate_form"), default=CertificateForm.UNKNOWN
     )
-    serial_number_enc: Mapped[str | None] = mapped_column(Text)           # Số seri (e.g., AB 123456)
-    book_number_enc: Mapped[str | None] = mapped_column(Text)             # Số vào sổ cấp GCN
+    serial_number_enc: Mapped[str | None] = mapped_column(Text)  # Số seri (e.g., AB 123456)
+    book_number_enc: Mapped[str | None] = mapped_column(Text)  # Số vào sổ cấp GCN
     issued_at: Mapped[str | None] = mapped_column(String(20))
-    issued_by: Mapped[str | None] = mapped_column(String(200))            # UBND tỉnh/huyện/Sở TNMT
+    issued_by: Mapped[str | None] = mapped_column(String(200))  # UBND tỉnh/huyện/Sở TNMT
     owner_name_enc: Mapped[str | None] = mapped_column(Text)
-    owner_id_enc: Mapped[str | None] = mapped_column(Text)                # CCCD/CMND
-    parcel_number: Mapped[str | None] = mapped_column(String(40), index=True)   # Số thửa
-    sheet_number: Mapped[str | None] = mapped_column(String(40), index=True)    # Số tờ bản đồ
+    owner_id_enc: Mapped[str | None] = mapped_column(Text)  # CCCD/CMND
+    parcel_number: Mapped[str | None] = mapped_column(String(40), index=True)  # Số thửa
+    sheet_number: Mapped[str | None] = mapped_column(String(40), index=True)  # Số tờ bản đồ
     area_sqm: Mapped[float | None] = mapped_column(Numeric(14, 2))
-    land_use_purpose: Mapped[str | None] = mapped_column(String(200))     # Mục đích sử dụng
-    land_use_term: Mapped[str | None] = mapped_column(String(120))        # Thời hạn sử dụng
+    land_use_purpose: Mapped[str | None] = mapped_column(String(200))  # Mục đích sử dụng
+    land_use_term: Mapped[str | None] = mapped_column(String(120))  # Thời hạn sử dụng
     address: Mapped[str | None] = mapped_column(String(500))
-    ward: Mapped[str | None] = mapped_column(String(120))                 # Xã/Phường
-    district: Mapped[str | None] = mapped_column(String(120))             # Quận/Huyện
-    province: Mapped[str | None] = mapped_column(String(120))             # Tỉnh/Thành
+    ward: Mapped[str | None] = mapped_column(String(120))  # Xã/Phường
+    district: Mapped[str | None] = mapped_column(String(120))  # Quận/Huyện
+    province: Mapped[str | None] = mapped_column(String(120))  # Tỉnh/Thành
 
     extra: Mapped[dict | None] = mapped_column(JSON)
 

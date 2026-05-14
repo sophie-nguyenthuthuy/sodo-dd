@@ -14,14 +14,14 @@ if TYPE_CHECKING:
 import enum
 
 
-class OrgType(str, enum.Enum):
+class OrgType(enum.StrEnum):
     BROKER = "broker"
     LAW_FIRM = "law_firm"
     BANK = "bank"
     INDIVIDUAL = "individual"
 
 
-class OrgTier(str, enum.Enum):
+class OrgTier(enum.StrEnum):
     TRIAL = "trial"
     STANDARD = "standard"
     ENTERPRISE = "enterprise"
@@ -35,9 +35,15 @@ class Organization(Base, IDMixin, TimestampMixin):
     contact_email: Mapped[str | None] = mapped_column(String(255))
     contact_phone: Mapped[str | None] = mapped_column(String(40))
 
-    users: Mapped[list["User"]] = relationship(back_populates="organization", cascade="all, delete-orphan")
-    api_keys: Mapped[list["ApiKey"]] = relationship(back_populates="organization", cascade="all, delete-orphan")
-    certificates: Mapped[list["Certificate"]] = relationship(back_populates="organization", cascade="all, delete-orphan")
+    users: Mapped[list["User"]] = relationship(
+        back_populates="organization", cascade="all, delete-orphan"
+    )
+    api_keys: Mapped[list["ApiKey"]] = relationship(
+        back_populates="organization", cascade="all, delete-orphan"
+    )
+    certificates: Mapped[list["Certificate"]] = relationship(
+        back_populates="organization", cascade="all, delete-orphan"
+    )
 
     @staticmethod
     def new_id() -> str:

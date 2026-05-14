@@ -13,7 +13,7 @@ def _parsed(**overrides):
 
 
 def test_low_risk():
-    s, level, flags = score(
+    s, level, _flags = score(
         parsed=_parsed(),
         ocr_confidence=0.92,
         portal={"status": "ok", "payload": {"match": "full", "status": "active"}},
@@ -40,10 +40,15 @@ def test_owner_mismatch_raises_flag():
     _, _, flags = score(
         parsed=_parsed(),
         ocr_confidence=0.9,
-        portal={"status": "ok", "payload": {"match": "partial",
-                                            "registered_owner": "B",
-                                            "input_owner": "A",
-                                            "status": "active"}},
+        portal={
+            "status": "ok",
+            "payload": {
+                "match": "partial",
+                "registered_owner": "B",
+                "input_owner": "A",
+                "status": "active",
+            },
+        },
         zoning=None,
         history=None,
     )
@@ -56,7 +61,9 @@ def test_dispute_flag():
         ocr_confidence=0.9,
         portal=None,
         zoning=None,
-        history={"status": "ok", "payload": {"transfers": [], "encumbrances": [],
-                                              "disputes": [{"type": "boundary"}]}},
+        history={
+            "status": "ok",
+            "payload": {"transfers": [], "encumbrances": [], "disputes": [{"type": "boundary"}]},
+        },
     )
     assert any(f["code"] == "active_dispute" for f in flags)

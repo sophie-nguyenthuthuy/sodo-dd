@@ -7,7 +7,7 @@ from typing import Protocol
 @dataclass(slots=True)
 class OCRResult:
     text: str
-    confidence: float        # 0.0 - 1.0
+    confidence: float  # 0.0 - 1.0
     engine: str
     page_count: int = 1
     extras: dict | None = None

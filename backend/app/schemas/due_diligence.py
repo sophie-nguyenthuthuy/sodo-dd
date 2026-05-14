@@ -12,8 +12,8 @@ class DueDiligenceOptions(BaseModel):
     include_portal_verify: bool = True
     include_zoning: bool = True
     include_history: bool = True
-    province_hint: str | None = None      # speed up portal/zoning routing
-    parcel_hint: str | None = None        # if user already knows
+    province_hint: str | None = None  # speed up portal/zoning routing
+    parcel_hint: str | None = None  # if user already knows
     sheet_hint: str | None = None
 
 
@@ -26,17 +26,17 @@ class CreateJobRequest(BaseModel):
 
 
 class RedFlag(BaseModel):
-    code: str                              # e.g. parcel_mismatch, planning_conflict, encumbrance
+    code: str  # e.g. parcel_mismatch, planning_conflict, encumbrance
     severity: Literal["info", "warn", "high", "critical"]
     description: str
-    source: str                            # which adapter raised it
+    source: str  # which adapter raised it
 
 
 class ExternalSource(BaseModel):
-    name: str                              # e.g. "dichvucong.gov.vn — Tra cứu thông tin thửa đất"
+    name: str  # e.g. "dichvucong.gov.vn — Tra cứu thông tin thửa đất"
     url: str | None = None
     queried_at: datetime
-    response_hash: str                     # sha256 of normalized response, for audit
+    response_hash: str  # sha256 of normalized response, for audit
     status: Literal["ok", "no_data", "error"]
 
 

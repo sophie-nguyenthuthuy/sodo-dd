@@ -7,8 +7,13 @@ from app.services.adapters import (
 
 def test_land_portal_mock_match():
     a = LandPortalAdapter(mode="mock")
-    r = a.query(serial_number="BU837192", owner_name="NGUYỄN VĂN A",
-                parcel_number="142", sheet_number="27", area_sqm=78.5)
+    r = a.query(
+        serial_number="BU837192",
+        owner_name="NGUYỄN VĂN A",
+        parcel_number="142",
+        sheet_number="27",
+        area_sqm=78.5,
+    )
     assert r.status == "ok"
     assert r.payload["match"] == "full"
     assert r.response_hash != ""

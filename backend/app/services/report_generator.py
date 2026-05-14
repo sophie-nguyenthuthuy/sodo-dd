@@ -1,4 +1,5 @@
 """Render a PDF due-diligence report."""
+
 from __future__ import annotations
 
 import hashlib
@@ -50,8 +51,12 @@ def render(
 ) -> tuple[bytes, str]:
     buf = io.BytesIO()
     doc = SimpleDocTemplate(
-        buf, pagesize=A4, topMargin=1.5 * cm, bottomMargin=1.5 * cm,
-        leftMargin=1.7 * cm, rightMargin=1.7 * cm,
+        buf,
+        pagesize=A4,
+        topMargin=1.5 * cm,
+        bottomMargin=1.5 * cm,
+        leftMargin=1.7 * cm,
+        rightMargin=1.7 * cm,
         title=f"Sổ Đỏ DD Report — {job_id}",
     )
     s = getSampleStyleSheet()
@@ -68,9 +73,12 @@ def render(
     )
     story.append(Spacer(1, 0.4 * cm))
 
-    risk_color = {"low": "#2e7d32", "medium": "#f9a825", "high": "#e65100", "critical": "#c62828"}.get(
-        risk_level, "#37474f"
-    )
+    risk_color = {
+        "low": "#2e7d32",
+        "medium": "#f9a825",
+        "high": "#e65100",
+        "critical": "#c62828",
+    }.get(risk_level, "#37474f")
     story.append(
         Paragraph(
             f"<b>Mức rủi ro: <font color='{risk_color}'>{risk_level.upper()}</font> "
@@ -108,13 +116,15 @@ def render(
     else:
         rows = [["#", "Mã", "Mức", "Mô tả", "Nguồn"]]
         for i, f in enumerate(red_flags, 1):
-            rows.append([
-                str(i),
-                f.get("code", ""),
-                f.get("severity", ""),
-                Paragraph(f.get("description", ""), s["BodyText"]),
-                f.get("source", ""),
-            ])
+            rows.append(
+                [
+                    str(i),
+                    f.get("code", ""),
+                    f.get("severity", ""),
+                    Paragraph(f.get("description", ""), s["BodyText"]),
+                    f.get("source", ""),
+                ]
+            )
         t = Table(rows, colWidths=[0.8 * cm, 3.5 * cm, 1.6 * cm, 8 * cm, 2.5 * cm])
         t.setStyle(
             TableStyle(
@@ -133,12 +143,14 @@ def render(
     story.append(Paragraph("<b>3. Nguồn đối chiếu</b>", s["Heading4"]))
     src_rows = [["Nguồn", "Trạng thái", "Thời điểm", "SHA-256"]]
     for src in sources:
-        src_rows.append([
-            src.get("name", ""),
-            src.get("status", ""),
-            src.get("queried_at", ""),
-            (src.get("response_hash", "") or "")[:16] + "…",
-        ])
+        src_rows.append(
+            [
+                src.get("name", ""),
+                src.get("status", ""),
+                src.get("queried_at", ""),
+                (src.get("response_hash", "") or "")[:16] + "…",
+            ]
+        )
     t = Table(src_rows, colWidths=[5 * cm, 2.5 * cm, 4.5 * cm, 4.5 * cm])
     t.setStyle(
         TableStyle(

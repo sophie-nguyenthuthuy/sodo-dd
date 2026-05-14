@@ -10,9 +10,9 @@ class AuditLog(Base, IDMixin, TimestampMixin):
     organization_id: Mapped[str | None] = mapped_column(
         ForeignKey("organization.id", ondelete="SET NULL"), index=True
     )
-    actor_id: Mapped[str | None] = mapped_column(String(40), index=True)     # user_id or api_key_id
-    actor_type: Mapped[str] = mapped_column(String(20))                       # user | api_key | system
-    action: Mapped[str] = mapped_column(String(80), index=True)               # cert.view, dd.create, ...
+    actor_id: Mapped[str | None] = mapped_column(String(40), index=True)  # user_id or api_key_id
+    actor_type: Mapped[str] = mapped_column(String(20))  # user | api_key | system
+    action: Mapped[str] = mapped_column(String(80), index=True)  # cert.view, dd.create, ...
     resource_type: Mapped[str | None] = mapped_column(String(40), index=True)
     resource_id: Mapped[str | None] = mapped_column(String(40), index=True)
     ip_address: Mapped[str | None] = mapped_column(String(45))

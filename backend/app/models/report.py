@@ -7,7 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.models.base import Base, IDMixin, TimestampMixin, new_ulid
 
 
-class JobStatus(str, enum.Enum):
+class JobStatus(enum.StrEnum):
     QUEUED = "queued"
     OCR = "ocr"
     VERIFYING = "verifying"
@@ -20,16 +20,20 @@ class JobStatus(str, enum.Enum):
     CANCELLED = "cancelled"
 
 
-class RiskLevel(str, enum.Enum):
-    LOW = "low"          # 0-29
-    MEDIUM = "medium"    # 30-59
-    HIGH = "high"        # 60-79
+class RiskLevel(enum.StrEnum):
+    LOW = "low"  # 0-29
+    MEDIUM = "medium"  # 30-59
+    HIGH = "high"  # 60-79
     CRITICAL = "critical"  # 80-100
 
 
 class DueDiligenceJob(Base, IDMixin, TimestampMixin):
-    organization_id: Mapped[str] = mapped_column(ForeignKey("organization.id", ondelete="CASCADE"), index=True)
-    certificate_id: Mapped[str | None] = mapped_column(ForeignKey("certificate.id", ondelete="SET NULL"))
+    organization_id: Mapped[str] = mapped_column(
+        ForeignKey("organization.id", ondelete="CASCADE"), index=True
+    )
+    certificate_id: Mapped[str | None] = mapped_column(
+        ForeignKey("certificate.id", ondelete="SET NULL")
+    )
     api_key_id: Mapped[str | None] = mapped_column(ForeignKey("api_key.id", ondelete="SET NULL"))
 
     status: Mapped[JobStatus] = mapped_column(
@@ -53,14 +57,18 @@ class DueDiligenceJob(Base, IDMixin, TimestampMixin):
 
 
 class DueDiligenceReport(Base, IDMixin, TimestampMixin):
-    job_id: Mapped[str] = mapped_column(ForeignKey("due_diligence_job.id", ondelete="CASCADE"), unique=True)
+    job_id: Mapped[str] = mapped_column(
+        ForeignKey("due_diligence_job.id", ondelete="CASCADE"), unique=True
+    )
 
-    risk_score: Mapped[int] = mapped_column(Integer, default=0)         # 0-100
+    risk_score: Mapped[int] = mapped_column(Integer, default=0)  # 0-100
     risk_level: Mapped[RiskLevel] = mapped_column(Enum(RiskLevel, name="risk_level"))
-    red_flags: Mapped[list] = mapped_column(JSON, default=list)         # [{code, severity, description, source}]
-    findings: Mapped[dict] = mapped_column(JSON, default=dict)          # full structured findings
-    sources: Mapped[list] = mapped_column(JSON, default=list)           # external sources consulted
-    pdf_key: Mapped[str | None] = mapped_column(String(500))            # S3 key for signed PDF
+    red_flags: Mapped[list] = mapped_column(
+        JSON, default=list
+    )  # [{code, severity, description, source}]
+    findings: Mapped[dict] = mapped_column(JSON, default=dict)  # full structured findings
+    sources: Mapped[list] = mapped_column(JSON, default=list)  # external sources consulted
+    pdf_key: Mapped[str | None] = mapped_column(String(500))  # S3 key for signed PDF
     pdf_sha256: Mapped[str | None] = mapped_column(String(64))
 
     job: Mapped["DueDiligenceJob"] = relationship(back_populates="report")

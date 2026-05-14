@@ -15,7 +15,7 @@ from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_ex
 class AdapterResponse:
     name: str
     url: str | None
-    status: str           # ok | no_data | error
+    status: str  # ok | no_data | error
     queried_at: datetime
     payload: dict[str, Any] = field(default_factory=dict)
     error: str | None = None

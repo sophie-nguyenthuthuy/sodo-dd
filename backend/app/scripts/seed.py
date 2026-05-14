@@ -1,4 +1,5 @@
 """Idempotent seed: creates a demo organization + owner user + API key."""
+
 from __future__ import annotations
 
 from app.core.security import generate_api_key, hash_password
@@ -8,7 +9,7 @@ from app.models.organization import OrgTier, OrgType
 from app.models.user import UserRole
 
 DEMO_EMAIL = "demo@sodo-dd.local"
-DEMO_PASSWORD = "demo_pa55word!"  # noqa: S105
+DEMO_PASSWORD = "demo_pa55word!"
 
 
 def main() -> None:
